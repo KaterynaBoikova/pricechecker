@@ -19,7 +19,7 @@ puppeteer.use(StealthPlugin());
 const getZamokUkr = async () => {
     const gettingPrices = await bluebird.map(zamokUkrURLs, async function(item) {
         if(item.link.length !== 0){
-            const browser = await puppeteer.launch({timeout: 0,});
+            const browser = await puppeteer.launch({timeout: 0, args:['--no-sandbox']});
             const userAgent = randomUseragent.getRandom();
             const page = await browser.newPage();
             await page.setUserAgent(userAgent);
@@ -83,7 +83,7 @@ const getHL = async () => {
 const getTopZamok = async () => {
     const gettingPrices = await bluebird.map(topZamokURLs, async function(item) {
         if(item.link.length !== 0){
-            const browser = await puppeteer.launch({timeout: 0,});
+            const browser = await puppeteer.launch({timeout: 0,args:['--no-sandbox']});
             const page = await browser.newPage();
             await page.setRequestInterception(true);
             await page.on('request', (request) => {
