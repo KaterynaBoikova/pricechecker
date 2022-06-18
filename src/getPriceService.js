@@ -20,8 +20,8 @@ const getZamokUkr = async () => {
     const gettingPrices = await bluebird.map(zamokUkrURLs, async function(item) {
         if(item.link.length !== 0){
             const browser = await puppeteer.launch({
-                timeout: 0,
-                args: [
+                "timeout": 0,
+                "args": [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                 ]});
@@ -89,8 +89,8 @@ const getTopZamok = async () => {
     const gettingPrices = await bluebird.map(topZamokURLs, async function(item) {
         if(item.link.length !== 0){
             const browser = await puppeteer.launch({
-                timeout: 0,
-                args: [
+                "timeout": 0,
+                "args": [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                 ]
