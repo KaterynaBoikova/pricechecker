@@ -1,19 +1,15 @@
 const pricesServices = require('./getPriceService');
-const zamokUkr = require("../zamokUkr.json");
-const topZamok = require("../topZamok.json");
+
 
 const getPricesTopZamokController = async (req, res, next) => {
-    //const topZamok = await pricesServices.getTopZamok();
-    // return res.status(200).json({topZamok});
-    return res.status(200).json({"topZamok":topZamok});
+    const topZamok = await pricesServices.getTopZamok();
+    return res.status(200).json({topZamok});
 };
 const getPricesZamokUkrController = async (req, res, next) => {
-    // const zamokUkr = await pricesServices.getZamokUkr();
-    // return res.status(200).json({zamokUkr});
-    return res.status(200).json({"zamokUkr": zamokUkr});
+    const zamokUkr = await pricesServices.getZamokUkr();
+    return res.status(200).json({zamokUkr});
+
 };
-
-
 
 const getPricesKreminController = async (req, res, next) => {
     const kremin = await pricesServices.getKremin();

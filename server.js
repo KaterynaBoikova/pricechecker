@@ -3,7 +3,6 @@ const cors = require('cors');
 const morgan = require('morgan');
 const process = require('process');
 const pricesRouter = require('./src/routes');
-const workerRouter = require('./src/worker')
 const { errorHandler } = require('./src/helpers/errorHandler');
 require('dotenv').config();
 require('events').EventEmitter.defaultMaxListeners = 1500;
@@ -17,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(useragent.express());
 app.use('/api/getPrices', pricesRouter);
-app.use('/api/getPrices', workerRouter);
+
 
 app.use(errorHandler);
 app.use(function (req, res, next) {
