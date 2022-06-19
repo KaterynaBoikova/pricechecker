@@ -51,7 +51,7 @@ const getZamokUkr = async () => {
             return {model: item.model, priceZamokUkr: a===null? "TBA" : (a._attrs['data-product-discounted-price']? a._attrs['data-product-discounted-price']:a._attrs['data-product-price'] ), link: item.link}
         }
         return {model: item.model, priceZamokUkr: "N/A", link: "N/A" }
-    }, {concurrency: 150});
+    }, {concurrency: 5});
     return gettingPrices;
 };
 
@@ -109,7 +109,7 @@ const getTopZamok = async () => {
             return {model: item.model, priceTopZamok: div === null? "TBC" : div.childNodes[0].childNodes[0]._rawText, link: item.link}
         }
         return {model: item.model, priceTopZamok: "N/A", link: item.link}
-    }, {concurrency: 150});
+    }, {concurrency: 5});
         return gettingPrices;
 
 };
