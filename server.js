@@ -17,6 +17,10 @@ app.use(express.json());
 app.use(useragent.express());
 app.use('/api/getPrices', pricesRouter);
 
+const workerRouter = require('./src/worker/workerRoutes');
+app.use('/api/getPrices', workerRouter);
+
+
 
 app.use(errorHandler);
 app.use(function (req, res, next) {
