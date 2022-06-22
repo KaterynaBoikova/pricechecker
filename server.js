@@ -4,10 +4,16 @@ const morgan = require('morgan');
 const process = require('process');
 const pricesRouter = require('./src/routes');
 const { errorHandler } = require('./src/helpers/errorHandler');
+const { createBullBoard } = require('@bull-board/api');
+const { BullAdapter } = require('@bull-board/api/bullAdapter');
+const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
+const { ExpressAdapter } = require('@bull-board/express');
+
 require('dotenv').config();
 require('events').EventEmitter.defaultMaxListeners = 1500;
 const useragent = require('express-useragent');
-const PORT = process.env.PORT || 8070;
+
+const PORT = process.env.PORT || 8060;
 
 const app = express();
 
@@ -19,8 +25,15 @@ app.use('/api/getPrices', pricesRouter);
 
 const workerRouter = require('./src/worker/workerRoutes');
 app.use('/api/getPrices', workerRouter);
-
-
+let Queue = require('bull');
+let workQueue = new Queue('puppy');
+const serverAdapter = new ExpressAdapter();
+const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
+    queues: [new BullAdapter(workQueue)],
+    serverAdapter: serverAdapter,
+});
+serverAdapter.setBasePath('/admin/queues');
+app.use('/admin/queues', serverAdapter.getRouter());
 
 app.use(errorHandler);
 app.use(function (req, res, next) {
