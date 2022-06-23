@@ -8,7 +8,6 @@ const getPricesTopZamokController = async (req, res, next) => {
 const getPricesZamokUkrController = async (req, res, next) => {
     const zamokUkr = await pricesServices.getZamokUkr();
     return res.status(200).json({zamokUkr});
-
 };
 
 const getPricesKreminController = async (req, res, next) => {
