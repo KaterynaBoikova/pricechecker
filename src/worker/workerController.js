@@ -1,75 +1,45 @@
 let Queue = require('bull');
 let workQueue = new Queue('puppy');
-const jobToDo = require('./workerJob');
 const errors = require("../helpers/errors");
+const jobToDo = require("./workerJob");
 
-let topZamokPuppy = {};
-let zamokUkrPuppy = {};
-
-const postJobTopZamokController = async (req, res, next) => {
-    const job = await workQueue.add('topZamok');
+const postJob = async (req, res, next) => {
+    const {'jobName': jobName} = req.params;
+    const job = await workQueue.add(jobName);
     return res.status(201).json({'jobName': job.name, 'jobId': job.id});
 };
-const postJobZamokUkrController = async (req, res, next) => {
-    const job = await workQueue.add('zamokUkr');
-    return res.status(201).json({'jobName': job.name, 'jobId': job.id});
-};
-const getJobPrgZamokUkrController = async (req, res, next) => {
+
+const getJobProgress = async (req, res, next) => {
     const {'jobId': jobId} = req.params;
-    return res.status(201).json({jobId});
+    const job = await workQueue.getJob(jobId);
+    const progress = job.progress();
+    const status = await job.getState();
+    return res.status(200).json({'progress %': progress, 'status': status, 'jobId': job.id, 'jobName': job.name});
 };
-const getJobPrgTopZamokController = async (req, res, next) => {
+
+const getJobResult = async (req, res, next) => {
     const {'jobId': jobId} = req.params;
-    return res.status(201).json({jobId});
-};
-const getJobResTopZamokController = async (req, res, next) => {
-    if(Object.keys(topZamokPuppy).length === 0){
-        throw new errors.DateWebError("Something went wrong with puppy, try again.");
-    }
-    return res.status(200).json({'topZamok': topZamokPuppy});
-};
-const getJobResZamokUkrController = async (req, res, next) => {
-    if(Object.keys(zamokUkrPuppy).length === 0){
-        throw new errors.DateWebError("Something went wrong with puppy, try again.");
-    }
-    return res.status(200).json({'zamokUkr': zamokUkrPuppy});
+    const job = await workQueue.getJob(jobId);
+    const data = job.returnvalue;
+    return res.status(200).json(data);
 };
 
+workQueue.process('zamokUkr', async(job)=>{
+    const data = await jobToDo.jobZamokUkr(job);
+    return data;
+});
 
-const processingJobOne = async ()=>{
-        await workQueue.process('topZamok', async(job)=>{
-        const data = await jobToDo.jobTopZamok();
-        topZamokPuppy = data;
-        return data;
-    });
-}
-const processingJobTwo = async ()=>{
-        await workQueue.process('zamokUkr', async(job)=>{
-        const data = await jobToDo.jobZamokUkr();
-        zamokUkrPuppy = data;
-        return data;
-    });
-}
+workQueue.process('topZamok', async(job)=>{
+    const data = await jobToDo.jobZamokUkr(job);
+    return data;
+});
 
-const resultTopZamok = processingJobOne();
-const resultZamokUkr = processingJobTwo();
-
-const getProgress = (jobId, progress)=>{
-    workQueue.on('global:progress', function(jobId, progress) {
-        console.log(`Job ${jobId} is ${progress * 100}% ready!`);
-        return (`Job ${jobId} is ${progress * 100}% ready!`);
-    });
-    workQueue.on('global:completed', (job, result) => {
-        console.log("Job Completed: ", job, "Result: ", result);
-    })
-};
-
+workQueue.clean(2000000, 'wait');
+workQueue.clean(2000000, 'failed');
+workQueue.clean(2000000, 'completed');
 
 module.exports = {
-    postJobTopZamokController,
-    postJobZamokUkrController,
-    getJobResTopZamokController,
-    getJobResZamokUkrController,
-    getJobPrgZamokUkrController,
-    getJobPrgTopZamokController
+    postJob,
+    getJobResult,
+    getJobProgress,
 }
