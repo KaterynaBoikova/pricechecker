@@ -45,7 +45,7 @@ const jobZamokUkr = async (job) => {
                     await browser.close();
                     const priceString = mobile === null ? "TBC" : mobile.childNodes[0].childNodes[0]._rawText;
                     progress += 1;
-                    job.progress((progress*100)/85);
+                    job.progress(Math.round((progress*100)/85));
                     return {
                         model: item.model,
                         priceZamokUkr: mobile === null ? "TBC" : (priceString.includes('&nbsp;') ? priceString.slice(0, priceString.indexOf('&nbsp;')) + priceString.slice(priceString.indexOf(';') + 1) : mobile.childNodes[0].childNodes[0]._rawText),
@@ -54,7 +54,7 @@ const jobZamokUkr = async (job) => {
                 }
                 await browser.close();
                 progress += 1;
-                job.progress((progress*100)/85);
+                job.progress(Math.round((progress*100)/85));
                 return {
                     model: item.model,
                     priceZamokUkr: a === null ? "TBA" : (a._attrs['data-product-discounted-price'] ? a._attrs['data-product-discounted-price'] : a._attrs['data-product-price']),
@@ -62,7 +62,7 @@ const jobZamokUkr = async (job) => {
                 }
             }
             progress += 1;
-            job.progress((progress*100)/85);
+            job.progress(Math.round((progress*100)/85));
             return {model: item.model, priceZamokUkr: "N/A", link: "N/A"}
         }
     }, {concurrency: 5});
@@ -94,12 +94,12 @@ const jobTopZamok = async (job) => {
                 let div = root.querySelector('div.total-price');
                 await browser.close();
                 progress+=1;
-                job.progress((progress*100)/85);
+                job.progress(Math.round((progress*100)/85));
                 return {model: item.model, priceTopZamok: div === null? "TBC" : div.childNodes[0].childNodes[0]._rawText, link: item.link}
             }
             progress+=1;
-            job.progress((progress*100)/85);
-            return {model: item.model, priceTopZamok: "N/A", link: item.link}
+                job.progress(Math.round((progress*100)/85));
+            return {model: item.model, priceTopZamok: "N/A", link: "N/A"}
             }
         }, {concurrency: 5});
     return gettingPrices;

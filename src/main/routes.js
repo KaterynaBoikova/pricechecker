@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const getPrices = require('./getPricesController');
-const { asyncWrapper } = require('./helpers/asyncWrapper');
+const { asyncWrapper } = require('../helpers/asyncWrapper');
 
 router.get('/zamokukr', asyncWrapper(getPrices.getPricesZamokUkrController));
 router.get('/kremin', asyncWrapper(getPrices.getPricesKreminController));
