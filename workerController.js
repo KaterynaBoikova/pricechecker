@@ -38,7 +38,12 @@ workQueue.process('zamokUkr', async(job)=>{
 });
 
 workQueue.process('topZamok', async(job)=>{
-    return await jobToDo.jobTopZamok(job);
+    try {
+        return await jobToDo.jobTopZamok(job);
+    } catch (error) {
+        console.log('error job');
+        return Promise.reject(error)
+    }
 });
 //clean queue
 // workQueue.obliterate({force: true });
