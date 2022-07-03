@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { asyncWrapper } = require('../helpers/asyncWrapper');
-const jobController = require('./workerController');
+const jobController = require('../../workerController');
 
 
 

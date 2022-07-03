@@ -1,6 +1,6 @@
 const Queue = require('bull');
-const errors = require("../helpers/errors");
-const jobToDo = require("./workerJob");
+const errors = require("./src/helpers/errors");
+const jobToDo = require("./src/worker/workerJob");
 
 let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 const workQueue = new Queue('puppy', REDIS_URL);
