@@ -38,17 +38,19 @@ workQueue.process('zamokUkr', async(job)=>{
 });
 
 workQueue.process('topZamok', async(job)=>{
-    try {
-        return await jobToDo.jobTopZamok(job);
-    } catch (error) {
-        console.log('error job');
-        return Promise.reject(error)
-    }
+    return await jobToDo.jobTopZamok(job);
+    // try {
+    //     return await jobToDo.jobTopZamok(job);
+    // } catch (error) {
+    //     console.log('error job');
+    //     return Promise.reject(error)
+    // }
 });
 //clean queue
 // workQueue.obliterate({force: true });
 
 //clean specified type after grace time
+workQueue.clean(2000000, 'active');
 workQueue.clean(2000000, 'wait');
 workQueue.clean(2000000, 'failed');
 workQueue.clean(2000000, 'completed');
