@@ -47,7 +47,7 @@ workQueue.process('topZamok', async(job)=>{
     // }
 });
 //clean queue
-workQueue.obliterate({force: true });
+// workQueue.obliterate({force: true });
 
 //clean specified type after grace time
 workQueue.clean(2000000, 'active');
