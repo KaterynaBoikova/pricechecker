@@ -65,7 +65,7 @@ const jobZamokUkr = async (job) => {
             job.progress(Math.round((progress*100)/85));
             return {model: item.model, priceZamokUkr: "N/A", link: "N/A"}
         }
-    }, {concurrency: 5});
+    }, {concurrency: 1});
     return gettingPrices;
 };
 
@@ -104,7 +104,7 @@ const jobTopZamok = async (job) => {
                 job.progress(Math.round((progress*100)/85));
             return {model: item.model, priceTopZamok: "N/A", link: "N/A"}
             }
-        }, {concurrency: 5});
+        }, {concurrency: 1});
     return gettingPrices;
 
 };
