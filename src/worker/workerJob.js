@@ -75,6 +75,7 @@ const jobTopZamok = async (job) => {
 
             for (i=0; i<85; i++){
             if(item.link.length !== 0){
+                console.log(`started ${item.model}`);
                 const browser = await puppeteer.launch({
                     "timeout": 0,
                     "args": [
@@ -93,7 +94,7 @@ const jobTopZamok = async (job) => {
                 let root = HTMLParser.parse(content.toString());
                 let div = root.querySelector('div.total-price');
                 await browser.close();
-                console.log(item.model);
+                console.log(`ended ${item.model}`);
                 progress+=1;
                 job.progress(Math.round((progress*100)/85));
                 return {model: item.model, priceTopZamok: div === null? "TBC" : div.childNodes[0].childNodes[0]._rawText, link: item.link}
